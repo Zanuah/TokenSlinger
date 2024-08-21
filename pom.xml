@@ -65,6 +65,11 @@
             <artifactId>spring-boot-docker-compose</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>io.github.danielliu1123</groupId>
+            <artifactId>httpexchange-spring-boot-starter</artifactId>
+            <version>3.3.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
