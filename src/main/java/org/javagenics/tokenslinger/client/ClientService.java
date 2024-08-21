@@ -1,5 +1,6 @@
 package org.javagenics.tokenslinger.client;
 
+import org.javagenics.tokenslinger.model.Client;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,22 @@ public class ClientService {
         this.bPasswordEncoder = bPasswordEncoder;
     }
 
-    public Client createClient(String name, String cpf, String email, String password) {
-        Optional<Client> clientExists = this.clientRepository.findByEmailOrCpf(email, cpf);
+    public Client createClient(Client client) {
+        Optional<ClientEntity> clientExists = this.clientRepository.findByEmailOrCpf(client.getEmail(), client.getCpf());
         if (clientExists.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email/Cpf already exists.");
         }
 
-        Client newClient = new Client();
-        newClient.setName(name);
-        newClient.setCpf(cpf);
-        newClient.setEmail(email);
-        newClient.setPassword(bPasswordEncoder.encode(password));
+        // Create new database entity with encrypted pasword
+        ClientEntity newClient = ClientEntity.builder().name(client.getName())
+                .cpf(client.getCpf()).email(client.getEmail()).build();
+        newClient.setEncryptedPassword(bPasswordEncoder.encode(client.getPassword()));
 
-        return clientRepository.save(newClient);
+        // DB write
+        ClientEntity savedClient =  clientRepository.save(newClient);
+
+        // Translate back to a response
+        return Client.builder().name(savedClient.getName())
+                .cpf(savedClient.getCpf()).email(savedClient.getEmail()).build();
     }
 }

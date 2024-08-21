@@ -2,8 +2,9 @@ package org.javagenics.tokenslinger.token;
 
 import java.time.Instant;
 
-import org.javagenics.tokenslinger.client.Client;
+import org.javagenics.tokenslinger.client.ClientEntity;
 import org.javagenics.tokenslinger.client.ClientRepository;
+import org.javagenics.tokenslinger.model.Login;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,11 +35,11 @@ public class TokenService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public String login(String email, String password) {
-        Client client = this.clientRepository.findByEmail(email)
+    public String login(Login login) {
+        ClientEntity client = this.clientRepository.findByEmail(login.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not found"));
 
-        boolean isPasswordCorrect = bCryptPasswordEncoder.matches(password, client.getPassword());
+        boolean isPasswordCorrect = bCryptPasswordEncoder.matches(login.getPassword(), client.getEncryptedPassword());
         if (!isPasswordCorrect) {
             throw new BadCredentialsException("Email/password invalid");
         }
