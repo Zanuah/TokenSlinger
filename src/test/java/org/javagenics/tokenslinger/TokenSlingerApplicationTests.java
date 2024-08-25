@@ -4,16 +4,13 @@ import io.github.danielliu1123.httpexchange.EnableExchangeClients;
 import io.github.danielliu1123.httpexchange.RequestConfiguratorBeanPostProcessor;
 import org.javagenics.tokenslinger.model.Client;
 import org.javagenics.tokenslinger.model.Login;
-import org.javagenics.tokenslinger.restclient.TokenSlingerApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -44,7 +41,7 @@ class TokenSlingerApplicationTests {
     void signinRestTest() {
         // Given
         Client client = Client.builder().email("test@test.com")
-                .password("password123").cpf("12345678901").name("bob").userType("SCOPE_client").build();
+                .password("password123").cpf("12345678901").name("bob").userType("client").build();
 
         // When
         ResponseEntity<Client> response = restTemplate.postForEntity("http://localhost:" + port + "/signin", client, Client.class);
@@ -64,8 +61,8 @@ class TokenSlingerApplicationTests {
         login.setPassword("password123");
 
         // When
-        ResponseEntity<Map> tokenResponse = restTemplate.postForEntity("http://localhost:" + port + "/login", login, Map.class);
-        Map token = tokenResponse.getBody();
+        var tokenResponse = restTemplate.postForEntity("http://localhost:" + port + "/login", login, Map.class);
+        var token = tokenResponse.getBody();
 
         assertEquals(HttpStatus.OK, tokenResponse.getStatusCode());
         assertNotNull(tokenResponse.getBody());
