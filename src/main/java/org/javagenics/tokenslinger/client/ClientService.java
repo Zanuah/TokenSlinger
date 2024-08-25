@@ -27,7 +27,7 @@ public class ClientService {
 
         // Create new database entity with encrypted pasword
         ClientEntity newClient = ClientEntity.builder().name(client.getName())
-                .cpf(client.getCpf()).email(client.getEmail()).build();
+                .cpf(client.getCpf()).email(client.getEmail()).userType(client.getUserType()).build();
         newClient.setEncryptedPassword(bPasswordEncoder.encode(client.getPassword()));
 
         // DB write
