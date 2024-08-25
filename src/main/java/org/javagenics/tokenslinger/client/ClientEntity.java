@@ -35,6 +35,7 @@ public class ClientEntity {
     private String encryptedPassword;
 
     @Column(name = "user_type")
+    @Builder.Default
     private String userType = "client";
 
     public Boolean isLoginCorrect(String password, PasswordEncoder passwordEncoder) {

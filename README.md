@@ -12,6 +12,7 @@ cd token-slinger
 
 ## Usage
 ```
+docker-compose up --build
 ./mvnw spring-boot:run
 ```
 

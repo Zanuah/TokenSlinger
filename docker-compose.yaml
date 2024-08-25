@@ -1,12 +1,13 @@
 services:
   postgres:
     image: postgres:latest
+    restart: always
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=database
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=token_slinger
+      - POSTGRES_USER=user-bob
+      - POSTGRES_PASSWORD=password-bob
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

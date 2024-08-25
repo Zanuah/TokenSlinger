@@ -12,5 +12,6 @@ public class Client {
     private String cpf;
     private String email;
     private String password;
+    @Builder.Default
     private String userType = "client";
 }
